@@ -99,14 +99,16 @@ module.exports = (api, options) => {
     })
   }
 
-  const cordovaBuild = (platform, release = true) => {
+  const cordovaBuild = (platform, release = true, device = true) => {
     // cordova run platform
     const cordovaMode = release ? '--release' : '--debug'
-    info(`executing "cordova build ${platform} ${cordovaMode}" in folder ${srcCordovaPath}`)
+    const cordovaDeviceFlag = device ? '--device' : ''
+    info(`executing "cordova build ${platform} ${cordovaMode} ${ cordovaDeviceFlag }" in folder ${srcCordovaPath}`)
     return spawn.sync('cordova', [
       'build',
       platform,
-      cordovaMode
+      cordovaMode,
+      cordovaDeviceFlag
     ], {
       cwd: srcCordovaPath,
       env: process.env,
@@ -218,7 +220,7 @@ module.exports = (api, options) => {
     // cordova clean
     await cordovaClean(platform)
     // cordova build --release (if you want a build debug build, use cordovaBuild(platform, false)
-    await cordovaBuild(platform)
+    await cordovaBuild(platform, args['mode'] == 'production', args['device'])
   }
 
   const addGitIgnoreToWWW = () => {
