@@ -103,12 +103,16 @@ module.exports = (api, options) => {
     // cordova run platform
     const cordovaMode = release ? '--release' : '--debug'
     const cordovaDeviceFlag = device ? '--device' : ''
-    info(`executing "cordova build ${platform} ${cordovaMode} ${ cordovaDeviceFlag }" in folder ${srcCordovaPath}`)
+    const additionalFlags = (platform == 'android') ? '--' : ''
+    const packageType = (platform == 'android') ? (release ? '--packageType=bundle' : '--packageType=apk') : ''
+    info(`executing "cordova build ${ platform } ${ cordovaMode } ${ cordovaDeviceFlag } ${ additionalFlags } ${ packageType }" in folder ${ srcCordovaPath }`)
     return spawn.sync('cordova', [
       'build',
       platform,
       cordovaMode,
-      cordovaDeviceFlag
+      cordovaDeviceFlag,
+      additionalFlags,
+      packageType
     ], {
       cwd: srcCordovaPath,
       env: process.env,
