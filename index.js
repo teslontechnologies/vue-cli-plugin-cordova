@@ -103,22 +103,36 @@ module.exports = (api, options) => {
     // cordova run platform
     const cordovaMode = release ? '--release' : '--debug'
     const cordovaDeviceFlag = device ? '--device' : ''
-    const additionalFlags = (platform == 'android') ? '--' : ''
-    const packageType = (platform == 'android') ? (release ? '--packageType=bundle' : '--packageType=apk') : ''
-    info(`executing "cordova build ${ platform } ${ cordovaMode } ${ cordovaDeviceFlag } ${ additionalFlags } ${ packageType }" in folder ${ srcCordovaPath }`)
-    return spawn.sync('cordova', [
-      'build',
-      platform,
-      cordovaMode,
-      cordovaDeviceFlag,
-      additionalFlags,
-      packageType
-    ], {
-      cwd: srcCordovaPath,
-      env: process.env,
-      stdio: 'inherit', // pipe to console
-      encoding: 'utf-8'
-    })
+    if (platform == 'android') {
+      const packageType = release ? '--packageType=bundle' : '--packageType=apk'
+      info(`executing "cordova build ${ platform } ${ cordovaMode } ${ cordovaDeviceFlag } -- ${ packageType }" in folder ${ srcCordovaPath }`)
+      return spawn.sync('cordova', [
+        'build',
+        platform,
+        cordovaMode,
+        cordovaDeviceFlag,
+        '--',
+        packageType
+      ], {
+        cwd: srcCordovaPath,
+        env: process.env,
+        stdio: 'inherit', // pipe to console
+        encoding: 'utf-8'
+      })
+    } else {
+      info(`executing "cordova build ${ platform } ${ cordovaMode } ${ cordovaDeviceFlag }" in folder ${ srcCordovaPath }`)
+      return spawn.sync('cordova', [
+        'build',
+        platform,
+        cordovaMode,
+        cordovaDeviceFlag
+      ], {
+        cwd: srcCordovaPath,
+        env: process.env,
+        stdio: 'inherit', // pipe to console
+        encoding: 'utf-8'
+      })
+    }
   }
 
   const cordovaClean = (platform) => {
