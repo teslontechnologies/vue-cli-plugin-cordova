@@ -99,20 +99,20 @@ module.exports = (api, options) => {
     })
   }
 
-  const cordovaBuild = (platform, release = true, device = true) => {
+  const cordovaBuild = (platform, release = true, device = true, packageType = 'apk') => {
     // cordova run platform
     const cordovaMode = release ? '--release' : '--debug'
     const cordovaDeviceFlag = device ? '--device' : ''
     if (platform == 'android') {
-      const packageType = release ? '--packageType=bundle' : '--packageType=apk'
-      info(`executing "cordova build ${ platform } ${ cordovaMode } ${ cordovaDeviceFlag } -- ${ packageType }" in folder ${ srcCordovaPath }`)
+      const packageTypeCmd = '--packageType=' + packageType
+      info(`executing "cordova build ${ platform } ${ cordovaMode } ${ cordovaDeviceFlag } -- ${ packageTypeCmd }" in folder ${ srcCordovaPath }`)
       return spawn.sync('cordova', [
         'build',
         platform,
         cordovaMode,
         cordovaDeviceFlag,
         '--',
-        packageType
+        packageTypeCmd
       ], {
         cwd: srcCordovaPath,
         env: process.env,
@@ -238,7 +238,7 @@ module.exports = (api, options) => {
     // cordova clean
     await cordovaClean(platform)
     // cordova build --release (if you want a build debug build, use cordovaBuild(platform, false)
-    await cordovaBuild(platform, args['mode'] == 'production', args['device'])
+    await cordovaBuild(platform, args['mode'] == 'production', args['device'], args['package-type'])
   }
 
   const addGitIgnoreToWWW = () => {
