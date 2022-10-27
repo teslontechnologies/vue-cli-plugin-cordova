@@ -1,6 +1,6 @@
 {
   "name": "vue-cli-plugin-cordova",
-  "version": "2.9.0",
+  "version": "2.10.0",
   "description": "vue-cli 3.x plugin for Apache Cordova",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/theleapofcode/vue-cli-plugin-cordova#readme",
   "dependencies": {
-    "@vue/cli-shared-utils": "^4.2.3",
+    "@vue/cli-shared-utils": "^5.0.8",
     "address": "^1.1.2",
     "cross-env": "^5.2.0",
     "cross-spawn": "^6.0.5",
